@@ -1,6 +1,16 @@
 # Prerequisites
 *.d
 
+# Project
+*.suo
+*.VC.db
+*.VC.opendb
+*.log
+*.tlog
+*.pdb
+*.idb
+*.ilk
+
 # Compiled Object files
 *.slo
 *.lo
