@@ -21,6 +21,20 @@ TEST_CASE("Factorials are computed", "[factorial]")
 	REQUIRE(Factorial(10) == 3628800);
 }
 
+#include "../inkparser/inkparser.h"
+
+TEST_CASE("ink parser basics", "[ink,parser]")
+{
+	InkParser parser;
+}
+
+#include "../inkengine/inkengine.h"
+
+TEST_CASE("ink engine","[]")
+{
+	fninkengine();
+}
+
 /*
 -h, -?, --help
 -l, --list-tests
