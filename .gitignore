@@ -10,6 +10,10 @@
 *.pdb
 *.idb
 *.ilk
+*.exp
+*.vcxproj.filters
+*.vcxproj.user
+*.aps
 
 # Compiled Object files
 *.slo
@@ -40,3 +44,7 @@
 *.exe
 *.out
 *.app
+
+# removing extra folders
+3rd_party/Mono/
+monotester/x64
