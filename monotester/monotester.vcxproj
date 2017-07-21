@@ -114,7 +114,7 @@
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>Copy /Y "$(ProjectDir)..\3rd_party\Mono\bin\mono-2.0-sgen.dll" "$(TargetDir)"</Command>
+      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +152,7 @@
       <AdditionalLibraryDirectories>$(ProjectDir)..\3rd_party\Mono\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>Copy /Y "$(ProjectDir)..\3rd_party\Mono\bin\mono-2.0-sgen.dll" "$(TargetDir)"</Command>
+      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

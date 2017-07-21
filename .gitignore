@@ -47,4 +47,6 @@
 
 # removing extra folders
 3rd_party/Mono/
-monotester/x64
+monotester/x64/
+inktester/x64/
+x64/
