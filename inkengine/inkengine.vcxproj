@@ -138,7 +138,9 @@
     <ClCompile Include="InkRuntime.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Runtime.h" />
     <ClInclude Include="include\Story.h" />
+    <ClInclude Include="include\Types.h" />
     <ClInclude Include="InkRuntime.h" />
     <ClInclude Include="inkengine.h" />
     <ClInclude Include="stdafx.h" />

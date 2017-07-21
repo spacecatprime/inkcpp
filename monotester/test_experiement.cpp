@@ -14,18 +14,24 @@
 TEST_CASE("experiment.runner", "[mono]")
 {
 	Mono::Runner::SetupDesc runnerSetup;
-	runnerSetup.m_assembliesPath = R"(F:\projects\research\mono_experiements\monorunner\mono_ink\ink-engine-runtime\Debug)";
+    runnerSetup.m_assembliesPath = R"(.\)";
 	runnerSetup.m_domainName = "TestDomain";
-	runnerSetup.m_monoEtcConfigFolder = R"(F:\projects\research\mono_experiements\Mono\etc)";
-	runnerSetup.m_monoLibFolder = R"(F:\projects\research\mono_experiements\Mono\lib)";
+    runnerSetup.m_monoEtcConfigFolder = R"(..\..\3rd_party\Mono\etc)";
+    runnerSetup.m_monoLibFolder = R"(..\..\3rd_party\Mono\lib)";
 
 	Mono::Runner runner;
 	runner.Setup(runnerSetup);
 
 	auto imgcor = runner.GetMscorlib();
-	imgcor->CallStaticMethod("System.Console:WriteLine(string)", Mono::Args({ "Hello World" }));
+    REQUIRE(imgcor);
+    imgcor->CallStaticMethod("System.Console:WriteLine(string)", Mono::Args({ "Hello World" }));
 
-	auto a = runner.LoadAssembly("ink-engine-runtime.dll");
+#ifdef _DEBUG
+	auto a = runner.LoadAssembly("ink-engine-runtime-debug.dll");
+#else
+    auto a = runner.LoadAssembly("ink-engine-runtime-release.dll");
+#endif
+    REQUIRE(a);
 	a->LookupClass("Ink.Runtime", "Tag");
 
 	auto objVoid = a->CreateObject("Ink.Runtime", "Void");

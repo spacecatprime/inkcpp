@@ -114,7 +114,10 @@
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"</Command>
+      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"
+cd $(TargetDir)
+call fixup.bat
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +155,10 @@
       <AdditionalLibraryDirectories>$(ProjectDir)..\3rd_party\Mono\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"</Command>
+      <Command>Copy /Y "$(ProjectDir)..\resources\*" "$(TargetDir)"
+cd $(TargetDir)
+call fixup.bat
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

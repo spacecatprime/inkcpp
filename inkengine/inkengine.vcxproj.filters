@@ -30,15 +30,21 @@
     <ClInclude Include="inkengine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InkRuntime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Story.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Runtime.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Types.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="inkengine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="InkRuntime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
