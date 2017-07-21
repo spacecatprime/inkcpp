@@ -35,6 +35,7 @@
 *.la
 *.a
 *.lib
+3rd_party/Mono/
 
 # Executables
 *.exe
