@@ -1,5 +1,7 @@
 ========================================================================
-    STATIC LIBRARY : inkengine Project Overview
+    DYNAMIC LINK LIBRARY : inkengine Project Overview
 ========================================================================
 
-The library for the Ink Parser
+the base engine for the ink engine
+
+all the guts should live in here

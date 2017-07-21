@@ -175,6 +175,14 @@
       <Project>{0914322e-1201-4ba9-bde4-790dbec855ef}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\inkengine\inkengine.vcxproj">
+      <Project>{0d53a994-15ed-4095-8e41-5d2f7a6a8f5f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\inkparser\inkparser.vcxproj">
+      <Project>{5baee709-6e52-4f6c-82de-09d6876ed94b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
