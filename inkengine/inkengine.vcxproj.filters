@@ -42,6 +42,9 @@
     <ClInclude Include="include\Types.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\Extra.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InkRuntime.cpp">

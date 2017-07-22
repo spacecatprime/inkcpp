@@ -109,7 +109,7 @@ namespace Ink
         /// <returns>The return value as returned from the ink function with `~ return myValue`, or null if nothing is returned.</returns>
         /// <param name="functionName">The name of the function as declared in ink.</param>
         /// <param name="arguments">The arguments that the ink function takes, if any. Note that we don't (can't) do any validation on the number of arguments right now, so make sure you get it right!</param>
-        virtual IObject EvaluateFunction(const std::string&  functionName, ArgumentList& arguments);
+        virtual IObject* EvaluateFunction(const std::string&  functionName, ArgumentList& arguments) = 0;
     };
 
     /// <summary>
@@ -140,7 +140,7 @@ namespace Ink
         /// Gets the visit/read count of a particular Container at the given path.
         virtual int VisitCountAtPathString(std::string pathString) = 0;
 
-        // TODO map in RapidJSON 
+        // TODO map in RapidJSON ?
         /// <summary>
         /// Object representation of full JSON state. Usually you should use
         /// LoadJson and ToJson since they serialise directly to string for you.

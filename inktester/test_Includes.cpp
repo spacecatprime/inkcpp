@@ -6,6 +6,7 @@
 
 #include <Story.h>
 #include <Runtime.h>
+#include <Extra.h>
 
 TEST_CASE("include compile test", "[ink]")
 {
