@@ -8,7 +8,7 @@ namespace Ink
 	Runtime::~Runtime()
 	{
 	}
-	bool Runtime::Setup(Configuration config)
+	bool Runtime::Setup(const Configuration& config)
 	{
 		return false;
 	}

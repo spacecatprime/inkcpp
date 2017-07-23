@@ -21,7 +21,7 @@ namespace Ink
 		Runtime();
 		~Runtime();
 
-		bool Setup(Configuration config);
+		bool Setup(const Configuration& config);
 	};
 };
 

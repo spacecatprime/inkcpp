@@ -30,20 +30,35 @@
     <ClInclude Include="inkengine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InkRuntime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Story.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Runtime.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Types.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\Extra.h">
+    <ClInclude Include="include\IInkList.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IInkListItem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IStoryException.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IChoice.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IStory.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IStoryState.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\IVariablesState.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="InkRuntime.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
