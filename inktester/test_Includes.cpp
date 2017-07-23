@@ -4,15 +4,15 @@
 ***********************************************************/
 #include <Catch\single_include\catch.hpp>
 
-#include <Types.h>
-#include <IInkListItem.h>
-#include <IInkList.h>
-#include <IStoryException.h>
-#include <IVariablesState.h>
-#include <IStoryException.h>
-#include <IStory.h>
-#include <IStoryState.h>
-#include <IChoice.h>
+#include <inkcpp/Types.h>
+#include <inkcpp/abstract/IInkListItem.h>
+#include <inkcpp/abstract/IInkList.h>
+#include <inkcpp/abstract/IStoryException.h>
+#include <inkcpp/abstract/IVariablesState.h>
+#include <inkcpp/abstract/IStoryException.h>
+#include <inkcpp/abstract/IStory.h>
+#include <inkcpp/abstract/IStoryState.h>
+#include <inkcpp/abstract/IChoice.h>
 
 TEST_CASE("include compile test", "[ink]")
 {
@@ -25,4 +25,15 @@ TEST_CASE("include compile test", "[ink]")
 	Ink::ChoicePtr ch;
 	Ink::StoryStatePtr ss;
 	Ink::VariablesStatePtr vs;
+}
+
+#include <inkcpp/InkRuntime.h>
+#include <inkcpp/InkFactory.h>
+
+TEST_CASE("simple construction", "[ink]")
+{
+	Ink::Runtime runtime;
+
+	Ink::Factory f;
+	auto excp = f.Create<Ink::IStoryException>(runtime);
 }

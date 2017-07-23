@@ -16,6 +16,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{01679400-a172-45ee-a29a-615c2d9889cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\abstract">
+      <UniqueIdentifier>{6659afa3-f5cd-4796-aca0-d5a8975bc34e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,35 +33,38 @@
     <ClInclude Include="inkengine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Types.h">
+    <ClInclude Include="include\inkcpp\abstract\IChoice.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IInkList.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IInkListItem.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IObject.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IStory.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IStoryException.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IStoryState.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IVariablesState.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\Types.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\IInkList.h">
+    <ClInclude Include="include\inkcpp\InkFactory.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\IInkListItem.h">
+    <ClInclude Include="include\inkcpp\InkRuntime.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IStoryException.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IChoice.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IStory.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IStoryState.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\IVariablesState.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="InkRuntime.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

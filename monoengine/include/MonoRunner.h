@@ -9,15 +9,15 @@ namespace Mono
 	public:
 		struct SetupDesc
 		{
-			const char* m_monoLibFolder;
-			const char* m_monoEtcConfigFolder;
-			const char* m_assembliesPath;
-			const char* m_domainName;
+			std::string m_monoLibFolder;
+			std::string m_monoEtcConfigFolder;
+			std::string m_assembliesPath;
+			std::string m_domainName;
 		};
 		using AssemblyMap = std::unordered_map<std::string, AssemblyPtr>;
 
 		Runner();
-		~Runner() = default;
+		~Runner();
 
 		bool Setup(SetupDesc& desc);
 

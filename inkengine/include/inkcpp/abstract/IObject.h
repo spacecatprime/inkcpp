@@ -1,12 +1,9 @@
 #pragma once
-
-// TODO rename this module and separate all the code parts
-
 // ********************************************************
-// Ink interface classes
+// TBD
 // ********************************************************
 
-#include "Types.h"
+#include "../Types.h"
 
 namespace Ink
 {

@@ -16,6 +16,7 @@ namespace Ink
     class IStoryState;
 	class IInkListItem;
 	class IInkList;
+	class IStoryException;
 
     using ChoiceList = std::vector<IChoice>;
     using TagList = std::vector<std::string>;
@@ -30,5 +31,6 @@ namespace Ink
 	using StoryPtr = std::shared_ptr<IStory>;
 	using InkListItemPtr = std::shared_ptr<IInkListItem>;
 	using InkListPtr = std::shared_ptr<IInkList>;
+	using StoryExceptionPtr = std::shared_ptr<IStoryException>;
 };
 

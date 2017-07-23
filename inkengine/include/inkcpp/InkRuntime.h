@@ -4,6 +4,14 @@
 // ********************************************************
 
 #include <MonoRunner.h>
+#include <MonoTypes.h>
+
+#include <memory>
+
+namespace Mono
+{
+	class Runner;
+}
 
 namespace Ink
 {
@@ -22,6 +30,11 @@ namespace Ink
 		~Runtime();
 
 		bool Setup(const Configuration& config);
+
+	private:
+		std::unique_ptr<Mono::Runner> m_runner;
+		Mono::Runner::SetupDesc m_setup;
+		Mono::AssemblyPtr m_inkAssembly;
 	};
 };
 

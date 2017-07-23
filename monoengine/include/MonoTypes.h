@@ -60,7 +60,11 @@ namespace Mono
 
 		bool IsValid() const
 		{
-			return m_typeInstance != nullptr;
+			if(this)
+			{
+				return m_typeInstance != nullptr;
+			}
+			return false;
 		}
 
 	protected:

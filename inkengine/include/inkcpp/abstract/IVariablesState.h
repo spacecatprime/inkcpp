@@ -3,7 +3,7 @@
 // Ink interface of the Ink.Runtime.Object
 // ********************************************************
 
-#include "Types.h"
+#include "../Types.h"
 
 namespace Ink
 {

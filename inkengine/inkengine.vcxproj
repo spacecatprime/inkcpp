@@ -138,16 +138,17 @@
     <ClCompile Include="InkRuntime.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\IChoice.h" />
-    <ClInclude Include="include\IInkList.h" />
-    <ClInclude Include="include\IInkListItem.h" />
-    <ClInclude Include="include\IObject.h" />
-    <ClInclude Include="include\IStory.h" />
-    <ClInclude Include="include\IStoryException.h" />
-    <ClInclude Include="include\IStoryState.h" />
-    <ClInclude Include="include\IVariablesState.h" />
-    <ClInclude Include="include\Types.h" />
-    <ClInclude Include="InkRuntime.h" />
+    <ClInclude Include="include\inkcpp\abstract\IChoice.h" />
+    <ClInclude Include="include\inkcpp\abstract\IInkList.h" />
+    <ClInclude Include="include\inkcpp\abstract\IInkListItem.h" />
+    <ClInclude Include="include\inkcpp\abstract\IObject.h" />
+    <ClInclude Include="include\inkcpp\abstract\IStory.h" />
+    <ClInclude Include="include\inkcpp\abstract\IStoryException.h" />
+    <ClInclude Include="include\inkcpp\abstract\IStoryState.h" />
+    <ClInclude Include="include\inkcpp\abstract\IVariablesState.h" />
+    <ClInclude Include="include\inkcpp\InkFactory.h" />
+    <ClInclude Include="include\inkcpp\InkRuntime.h" />
+    <ClInclude Include="include\inkcpp\Types.h" />
     <ClInclude Include="inkengine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
