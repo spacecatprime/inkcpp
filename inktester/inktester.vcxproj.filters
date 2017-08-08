@@ -37,5 +37,8 @@
     <ClCompile Include="test_InkRunner.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="test_SimpleStory.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

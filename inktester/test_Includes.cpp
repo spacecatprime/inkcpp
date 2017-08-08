@@ -1,6 +1,5 @@
 /**********************************************************
-
-
+ Compile tests
 ***********************************************************/
 #include <Catch\single_include\catch.hpp>
 
@@ -14,10 +13,11 @@
 #include <inkcpp/abstract/IStoryState.h>
 #include <inkcpp/abstract/IChoice.h>
 
-TEST_CASE("include compile test", "[ink]")
+//
+// only a compile test, no running intended 
+//
+TEST_CASE("include.compile.test", "[ink][!hide]")
 {
-	REQUIRE(true);
-
 	Ink::ObjectPtr objptr;
 	Ink::InkListPtr inklist;
 	Ink::InkListItemPtr itemptr;
@@ -25,15 +25,5 @@ TEST_CASE("include compile test", "[ink]")
 	Ink::ChoicePtr ch;
 	Ink::StoryStatePtr ss;
 	Ink::VariablesStatePtr vs;
-}
-
-#include <inkcpp/InkRuntime.h>
-#include <inkcpp/InkFactory.h>
-
-TEST_CASE("simple construction", "[ink]")
-{
-	Ink::Runtime runtime;
-
-	Ink::Factory f;
-	auto excp = f.Create<Ink::IStoryException>(runtime);
+	Ink::StoryExceptionPtr exp;
 }

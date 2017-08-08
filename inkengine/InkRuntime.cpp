@@ -2,11 +2,17 @@
 #include "include/inkcpp/InkFactory.h"
 
 #include <MonoAssembly.h>
+#include <MonoClass.h>
+#include <MonoLogger.h>
 
 namespace Ink
 {
 	Runtime::Runtime()
 	{
+		if (Mono::GetLogger() == nullptr)
+		{
+			Mono::SetLogger(Mono::CreateDefaultLogger());
+		}
 	}
 	Runtime::~Runtime()
 	{
@@ -34,25 +40,5 @@ namespace Ink
 		}
 
 		return true;
-	}
-};
-
-#include "include\inkcpp\abstract\IStoryException.h"
-
-namespace Ink
-{
-	class StoryException: public IStoryException
-	{
-		// Inherited via IStoryException
-		const std::string & GetMessage() override
-		{
-			return "";
-		}
-	};
-
-	template <>
-	StoryExceptionPtr Factory::Create(Runtime& runtime)
-	{
-		return StoryExceptionPtr(new StoryException);
 	}
 };

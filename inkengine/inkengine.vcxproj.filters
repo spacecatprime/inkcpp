@@ -66,9 +66,21 @@
     <ClInclude Include="include\inkcpp\InkRuntime.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\inkcpp\StoryException.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inkcpp\Story.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InkRuntime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StoryException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Story.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

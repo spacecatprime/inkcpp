@@ -156,6 +156,7 @@
     <ClInclude Include="include\MonoClass.h" />
     <ClInclude Include="include\MonoDomain.h" />
     <ClInclude Include="include\MonoImage.h" />
+    <ClInclude Include="include\MonoList.h" />
     <ClInclude Include="include\MonoLogger.h" />
     <ClInclude Include="include\MonoMethod.h" />
     <ClInclude Include="include\MonoObject.h" />

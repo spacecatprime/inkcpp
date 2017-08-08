@@ -26,18 +26,31 @@ namespace Mono
 
 	Runner::~Runner()
 	{
-		if (m_domain->IsValid())
-		{
-			mono_jit_cleanup(*m_domain);
-			m_domain.reset();
-		}
+		// mono_jit_cleanup seems like it breaks things
+		//if (m_domain->IsValid())
+		//{
+		//	mono_jit_cleanup(*m_domain);
+		//	m_domain.reset();
+		//}
 	}
 
 	bool Runner::Setup(SetupDesc & desc)
 	{
 		mono_set_dirs(desc.m_monoLibFolder.c_str(), desc.m_monoEtcConfigFolder.c_str());
 		mono_set_assemblies_path(desc.m_assembliesPath.c_str());
-		m_domain->SetInstance(mono_jit_init(desc.m_domainName.c_str()));
+
+		MonoDomain* dom = nullptr;
+		dom = mono_get_root_domain();
+		if (!dom)
+		{
+			dom = mono_jit_init(desc.m_domainName.c_str());
+			if (!dom)
+			{
+				return false;
+			}
+		}
+
+		m_domain->SetInstance(dom);
 		m_mscorlib->SetInstance(mono_image_loaded("mscorlib"));
 		m_baseAssemblyPath = desc.m_assembliesPath;
 		return m_domain->IsValid();

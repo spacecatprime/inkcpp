@@ -172,6 +172,7 @@
     <ClCompile Include="test_Includes.cpp" />
     <ClCompile Include="test_InkRunner.cpp" />
     <ClCompile Include="test_MonoBasics.cpp" />
+    <ClCompile Include="test_SimpleStory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\monoengine\monoengine.vcxproj">

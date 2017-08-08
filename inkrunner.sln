@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inkrunner", "inkrunner\inkrunner.vcxproj", "{E5193AD2-393D-4F0B-83F3-2D1121DD1232}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "inktester", "inktester\inktester.vcxproj", "{2AF4FBE0-35DF-47E4-A025-D6C7AB654F5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2C1381C7-3653-49B1-8E5F-B6B17DB2C7B3} = {2C1381C7-3653-49B1-8E5F-B6B17DB2C7B3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "monoengine", "monoengine\monoengine.vcxproj", "{0914322E-1201-4BA9-BDE4-790DBEC855EF}"
 EndProject

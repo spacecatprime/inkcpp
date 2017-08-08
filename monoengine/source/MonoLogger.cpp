@@ -63,12 +63,12 @@ namespace Mono
 		}
 	};
 
+	static ILogger* theLogger = nullptr;
+
 	ILogger* CreateDefaultLogger()
 	{
 		return new DefaultLogger();
 	}
-
-	ILogger* theLogger = nullptr;
 
 	void SetLogger(ILogger* logger)
 	{

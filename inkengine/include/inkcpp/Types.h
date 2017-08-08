@@ -18,12 +18,6 @@ namespace Ink
 	class IInkList;
 	class IStoryException;
 
-    using ChoiceList = std::vector<IChoice>;
-    using TagList = std::vector<std::string>;
-    using StringList = std::vector<std::string>;
-    using ArgumentList = const std::vector<void*>;
-    // TODO map in RapidJSON using JsonDOM = std::unordered_map<std::string, std::any>;
-
 	using ObjectPtr = std::shared_ptr<IObject>;
 	using VariablesStatePtr = std::shared_ptr<IVariablesState>;
 	using ChoicePtr = std::shared_ptr<IChoice>;
@@ -32,5 +26,10 @@ namespace Ink
 	using InkListItemPtr = std::shared_ptr<IInkListItem>;
 	using InkListPtr = std::shared_ptr<IInkList>;
 	using StoryExceptionPtr = std::shared_ptr<IStoryException>;
+
+	using ChoiceList = std::vector<ChoicePtr>;
+	using TagList = std::vector<std::string>;
+	using StringList = std::vector<std::string>;
+	using ArgumentList = const std::vector<void*>;
 };
 

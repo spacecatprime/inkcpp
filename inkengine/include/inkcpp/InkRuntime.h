@@ -31,6 +31,8 @@ namespace Ink
 
 		bool Setup(const Configuration& config);
 
+		Mono::AssemblyPtr GetInkAssembly() const { return m_inkAssembly;  }
+
 	private:
 		std::unique_ptr<Mono::Runner> m_runner;
 		Mono::Runner::SetupDesc m_setup;

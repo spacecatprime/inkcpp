@@ -65,6 +65,13 @@ namespace Ink
         // are we mid story rather than at a choice point or at the end.
         virtual bool CanContinue() = 0;
 
+		/// Continue the story for one line of content, if possible.
+		/// If you're not sure if there's more content available, for example if you
+		/// want to check whether you're at a choice point or at the end of the story,
+		/// you should call <c>CanContinue()</c> before calling this function.
+		/// <returns>The line of text content.</returns>
+		virtual std::string Continue() = 0;
+
         // Continue the story until the next choice point or until it runs out of content.
         // This is as opposed to the Continue() method which only evaluates one line of output at a time.
         virtual std::string ContinueMaximally() = 0;

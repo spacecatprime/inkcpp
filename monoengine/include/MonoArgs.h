@@ -10,6 +10,10 @@ namespace Mono
 	public:
 		operator void** ()
 		{
+			if (m_args.empty())
+			{
+				return nullptr;
+			}
 			return &m_args.front();
 		}
 
@@ -28,6 +32,7 @@ namespace Mono
 		template<> void Add(const char* arg);
 		template<> void Add(void* arg);
 		template<> void Add(std::string arg);
+		template<> void Add(int* arg);
 
 		Args()
 			: m_args()
@@ -59,6 +64,12 @@ namespace Mono
 
 	template<>
 	inline void Args::Add(void * arg)
+	{
+		m_args.push_back(arg);
+	}
+
+	template<>
+	inline void Args::Add(int* arg)
 	{
 		m_args.push_back(arg);
 	}

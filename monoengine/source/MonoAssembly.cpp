@@ -14,6 +14,8 @@ namespace Mono
 {
 	Assembly::Assembly()
 		: m_image(new Image)
+		, m_domain()
+		, m_classMap()
 	{
 	}
 
