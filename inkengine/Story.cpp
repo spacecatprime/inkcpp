@@ -4,14 +4,13 @@
 #include "include/inkcpp/InkRuntime.h"
 #include "include/inkcpp/InkFactory.h"
 #include "include/inkcpp/abstract/IStory.h"
+#include "include/inkcpp/InkRuntime.h"
 
 #include <MonoAssembly.h>
 #include <MonoClass.h>
 #include <MonoObject.h>
 #include <MonoLogger.h>
 #include <MonoList.h>
-
-// https://fossies.org/linux/mono/samples/embed/test-invoke.c
 
 #include <assert.h> 
 
@@ -27,10 +26,12 @@ namespace Ink
 	public:
 		Mono::ObjectPtr m_self;
 		Mono::ClassPtr m_class;
+		Ink::Runtime& m_runtime;
 
-		Story(Mono::ObjectPtr self, Mono::ClassPtr clazz)
+		Story(Mono::ObjectPtr self, Mono::ClassPtr clazz, Ink::Runtime& rt)
 			: m_self(self)
 			, m_class(clazz)
+			, m_runtime(rt)
 		{
 		}
 
@@ -40,29 +41,42 @@ namespace Ink
 			THROW_NO_IMPL
 			return 0;
 		}
+
 		virtual ChoiceList GetCurrentChoices() override
 		{
-			//THROW_NO_IMPL //public List<Choice> currentChoices
-			// https://github.com/izuzanak/uclang/blob/75c43bc631c3171dcbed52163491343287e68dd5/uclang/mods/mono_uclm/source_files/ucl_mono.cc
-
 			auto list = m_self->GetProperty<Mono::ObjectPtr>("currentChoices");
+			Mono::List<Mono::ObjectPtr> itemList(*list);
 
-			Mono::List<ObjectPtr> itemList(*list);
-			auto r1 = itemList.GetCapacity();
-			auto r2 = itemList.GetCount();
-			auto r3 = itemList.GetItem(0);
-
-			if (itemList.GetCount() == 0)
+			int itemCount = itemList.GetCount();
+			if (itemCount <= 0)
 			{
 				return ChoiceList();
 			}
 
-			int index = 0;
-			Mono::Args args;
-			args.Add(&index);
-			auto items = list->CallMethod<Mono::ObjectPtr>("System.Collections.Generic.List`1<Ink.Runtime.Choice>:get_Item (int)", args);
-		
-			return ChoiceList();
+			Factory factory;
+			ChoiceList choiceList;
+
+			for (int i = 0; i < itemCount; ++i)
+			{
+				auto fnParameters = [i, &itemList](int index, void* arg) -> bool
+				{
+					if (index == 0)
+					{
+						auto item = itemList.GetItem(i);
+						auto ppMonoObj = reinterpret_cast<Mono::ObjectPtr*>(arg);
+						*ppMonoObj = item;
+						return true;
+					}
+					return false;
+				};
+
+				auto ch = factory.Create<IChoice>(m_runtime, fnParameters);
+				if (ch)
+				{
+					choiceList.emplace_back(ch);
+				}
+			}
+			return choiceList;
 		}
 		virtual std::string GetCurrentText() override
 		{
@@ -70,18 +84,17 @@ namespace Ink
 		}
 		virtual TagList GetCurrentTags() override
 		{
-			THROW_NO_IMPL;
+			THROW_NO_IMPL; // write a List<string> extraction method
 			return TagList();
 		}
 		virtual StringList GetCurrentErrors() override
 		{
-			THROW_NO_IMPL;
+			THROW_NO_IMPL; // write a List<string> extraction method
 			return StringList();
 		}
 		virtual bool HasError() override
 		{
-			THROW_NO_IMPL;
-			return false;
+			return m_self->GetProperty<bool>("hasError");
 		}
 		virtual VariablesStatePtr GetVariablesState() override
 		{
@@ -100,12 +113,11 @@ namespace Ink
 		}
 		virtual std::string ToJsonString() override
 		{
-			THROW_NO_IMPL;
-			return std::string();
+			return m_self->CallMethod<std::string>("ToJsonString");
 		}
 		virtual void ResetState() override
 		{
-			THROW_NO_IMPL;
+			m_self->CallMethod<void>("ResetState");
 		}
 		virtual void ResetErrors() override
 		{
@@ -121,24 +133,28 @@ namespace Ink
 		}
 		virtual std::string ContinueMaximally() override
 		{
-			THROW_NO_IMPL;
-			return std::string();
+			return m_self->CallMethod<std::string>("ContinueMaximally");
 		}
 		virtual void ChoosePathString(const std::string & path, ArgumentList & arguments) override
 		{
+			//public void ChoosePathString (string path, params object [] arguments)
 			THROW_NO_IMPL;
 		}
 		virtual void ChooseChoiceIndex(int choiceIdx) override
 		{
-			THROW_NO_IMPL;
+			Mono::Args args;
+			args.Add(&choiceIdx);
+			return m_self->CallMethod<void>("ChooseChoiceIndex", args);
 		}
-		virtual bool HasFunction(const std::string & functionName) const override
+		virtual bool HasFunction(const std::string& functionName) const override
 		{
-			THROW_NO_IMPL;
-			return false;
+			Mono::Args args;
+			args.Add(functionName);
+			return m_self->CallMethod<bool>("HasFunction", args);
 		}
 		virtual ObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
 		{
+			//public object EvaluateFunction (string functionName, params object [] arguments)
 			THROW_NO_IMPL;
 			return ObjectPtr();
 		}
@@ -148,7 +164,6 @@ namespace Ink
 		}
 
 		Mono::ObjectPtr m_object;
-
 	};
 
 	template <>
@@ -177,13 +192,17 @@ namespace Ink
 		Mono::Args args({ jsonData });
 		Mono::ObjectPtr obj = assm->CreateObject("Ink.Runtime", "Story", "Ink.Runtime.Story:.ctor(string)", args);
 
-		auto s = StoryPtr(new Story(obj, storyClass));
+		auto s = StoryPtr(new Story(obj, storyClass, runtime));
 		return s;
 	}
 };
 
 // 
 /*
+
+github.com/spacecatprime/ink/blob/master/ink-engine-runtime/Story.cs
+
+https://fossies.org/linux/mono/samples/embed/test-invoke.c
 https://github.com/izuzanak/uclang/blob/75c43bc631c3171dcbed52163491343287e68dd5/uclang/mods/mono_uclm/source_files/ucl_mono.cc
 https://github.com/izuzanak/uclang/blob/25398ce5e6924b8263e9fd4bf3ee3795ed548269/uclang/mods/mono_uclm/source_files/mono_module.cc
 

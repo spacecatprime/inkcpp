@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="inktester.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="test_FullStory.cpp" />
     <ClCompile Include="test_Includes.cpp" />
     <ClCompile Include="test_InkRunner.cpp" />
     <ClCompile Include="test_MonoBasics.cpp" />

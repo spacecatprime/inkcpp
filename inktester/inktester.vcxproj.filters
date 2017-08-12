@@ -40,5 +40,8 @@
     <ClCompile Include="test_SimpleStory.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="test_FullStory.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

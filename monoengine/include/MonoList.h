@@ -5,13 +5,15 @@
 
 #include <mono/jit/jit.h>
 
+// TODO: should this be a Mono::ObjectPtr only list for now?
+
 namespace Mono
 {
 	struct ListObjectWrapper
 	{
-		ObjectPtr operator()(MonoObject* obj)
+		ObjectPtr Wrap(ObjectPtr obj)
 		{
-			return ObjectPtr(new Object(obj));
+			return obj;
 		}
 	};
 
@@ -66,6 +68,17 @@ namespace Mono
 	template<typename TItem, typename TWrap>
 	inline TItem List<TItem, TWrap>::GetItem(int index)
 	{
+		if (m_list.get() == nullptr)
+		{
+			return TItem();
+		}
+		Mono::Args args;
+		args.Add(&index);
+		auto item = m_list->CallMethod<ObjectPtr>("get_Item", args);
+		if(item)
+		{
+			return TWrap().Wrap(item);
+		}
 		return TItem();
 	}
 

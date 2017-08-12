@@ -135,6 +135,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Choice.cpp" />
     <ClCompile Include="InkRuntime.cpp" />
     <ClCompile Include="Story.cpp" />
     <ClCompile Include="StoryException.cpp" />
