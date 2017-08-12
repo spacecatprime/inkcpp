@@ -25,14 +25,11 @@ namespace Mono
 		template<typename T>
 		void Add(T arg)
 		{
-			(void)arg;
-			static_assert(false, "Arg needs a specialization");
+			m_args.push_back(arg);
 		}
 
 		template<> void Add(const char* arg);
-		template<> void Add(void* arg);
 		template<> void Add(std::string arg);
-		template<> void Add(int* arg);
 
 		Args()
 			: m_args()
@@ -61,18 +58,6 @@ namespace Mono
 		std::vector<void*> m_args;
 		std::vector<StringPtr> m_strings;
 	};
-
-	template<>
-	inline void Args::Add(void * arg)
-	{
-		m_args.push_back(arg);
-	}
-
-	template<>
-	inline void Args::Add(int* arg)
-	{
-		m_args.push_back(arg);
-	}
 
 	template<>
 	inline void Args::Add(std::string arg)

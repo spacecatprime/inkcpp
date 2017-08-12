@@ -58,6 +58,12 @@ namespace Mono
 			m_typeInstance = inst;
 		}
 
+		template <typename T>
+		T* GetInstance() const
+		{
+			return m_typeInstance;
+		}
+
 		bool IsValid() const
 		{
 			if(this)

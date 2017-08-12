@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\MonoArgs.h" />
+    <ClInclude Include="include\MonoArray.h" />
     <ClInclude Include="include\MonoAssembly.h" />
     <ClInclude Include="include\MonoClass.h" />
     <ClInclude Include="include\MonoDomain.h" />

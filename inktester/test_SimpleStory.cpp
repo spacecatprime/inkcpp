@@ -120,11 +120,12 @@ TEST_CASE("simple.withachoice", "[ink]")
 		story->ResetErrors();
 	}
 
-	//TODO story->GetCurrentTags();
-	//TODO story->GetCurrentErrors();
-	//TODO story->GetInkVersionCurrent();
+	int ver = story->GetInkVersionCurrent();
+	REQUIRE(ver == 17);
 	//TODO story->GetStoryState();
 	//TODO story->GetVariablesState();
+	Ink::TagList tags = story->GetCurrentTags();
+	Ink::StringList errs = story->GetCurrentErrors();
 	std::string data = story->ToJsonString();
 	bool test = story->HasFunction("not_there");
 	std::string cont = story->ContinueMaximally();

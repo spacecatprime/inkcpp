@@ -11,7 +11,6 @@ namespace Ink
 	struct Choice : public IChoice
 	{
 		int m_index;
-		Mono::ObjectPtr m_monoObj;
 		std::string m_text;
 		std::string m_pathStringOnChoice;
 		std::string m_sourcePath;
@@ -23,14 +22,15 @@ namespace Ink
 
 		bool Construct(Runtime& runtime, Factory::Parameters params)
 		{
-			if (!params(0, &m_monoObj))
+			Mono::ObjectPtr baseObj;
+			if (!params(0, &baseObj))
 			{
 				return false;
 			}
-			m_index = m_monoObj->GetProperty<int>("index");
-			m_text = m_monoObj->GetProperty<std::string>("text");
-			m_pathStringOnChoice = m_monoObj->GetProperty<std::string>("pathStringOnChoice");
-			m_sourcePath = m_monoObj->GetProperty<std::string>("sourcePath");
+			m_index = baseObj->GetProperty<int>("index");
+			m_text = baseObj->GetProperty<std::string>("text");
+			m_pathStringOnChoice = baseObj->GetProperty<std::string>("pathStringOnChoice");
+			m_sourcePath = baseObj->GetProperty<std::string>("sourcePath");
 			return true;
 		}
 

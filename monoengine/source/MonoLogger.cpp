@@ -3,7 +3,8 @@
 
 #include <mono/jit/jit.h>
 
-#include  <cstdio>
+#include <cstdio>
+#include <cstdarg>
 
 namespace Mono
 {
@@ -18,46 +19,61 @@ namespace Mono
 		}
 
 		// Inherited via ILogger
-		virtual void SetLevel(int level) override
+		void SetLevel(int level) override
 		{
 			m_level = level;
 		}
-		virtual void Trace(std::string msg) override
+		
+		std::string ToString(const char* format, ...) override
+		{
+			if (!format)
+			{
+				return "<null-format>";
+			}
+			char dest[1024];
+			va_list argptr;
+			va_start(argptr, format);
+			vsprintf_s(dest, format, argptr);
+			va_end(argptr);
+			return std::string(dest);
+		}
+
+		void Trace(std::string msg) override
 		{
 			if (m_level <= 0)
 			{
 				Printf("trace", msg.c_str());
 			}
 		}
-		virtual void Debug(std::string msg) override
+		void Debug(std::string msg) override
 		{
 			if (m_level <= 1)
 			{
 				Printf("debug", msg.c_str());
 			}
 		}
-		virtual void Notice(std::string msg) override
+		void Notice(std::string msg) override
 		{
 			if (m_level <= 2)
 			{
 				Printf("notice", msg.c_str());
 			}
 		}
-		virtual void Warning(std::string msg) override
+		void Warning(std::string msg) override
 		{
 			if (m_level <= 3)
 			{
 				Printf("warning", msg.c_str());
 			}
 		}
-		virtual void Error(std::string msg) override
+		void Error(std::string msg) override
 		{
 			if (m_level <= 4)
 			{
 				Printf("error", msg.c_str());
 			}
 		}
-		virtual void Exception(MonoObject* except) override
+		void Exception(MonoObject* except) override
 		{
 			std::printf("except: %s\n", Mono::ToString(except).c_str());
 		}

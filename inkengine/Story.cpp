@@ -11,6 +11,7 @@
 #include <MonoObject.h>
 #include <MonoLogger.h>
 #include <MonoList.h>
+#include <MonoArray.h>
 
 #include <assert.h> 
 
@@ -21,6 +22,32 @@
 
 namespace Ink
 {
+	StringList ConvertToStringList(Mono::ObjectPtr objList)
+	{
+		// TODO detect 'is-a' List<>
+
+		if (!objList)
+		{
+			return StringList();
+		}
+
+		Mono::List<Mono::ObjectPtr> itemList(*objList);
+		int itemCount = itemList.GetCount();
+		if (itemCount <= 0)
+		{
+			return StringList();
+		}
+
+		StringList stringList;
+		for (int i = 0; i < itemCount; ++i)
+		{
+			auto item = itemList.GetItem(i);
+			auto data = item->CallMethod<std::string>("ToString");
+			stringList.emplace_back(data);
+		}
+		return stringList;
+	}
+
 	class Story : public IStory
 	{
 	public:
@@ -36,13 +63,12 @@ namespace Ink
 		}
 
 		// Inherited via IStory
-		virtual int GetInkVersionCurrent() override
+		int GetInkVersionCurrent() override
 		{
-			THROW_NO_IMPL
-			return 0;
+			return m_self->GetStaticField<int, MONO_TYPE_I4>("inkVersionCurrent");
 		}
 
-		virtual ChoiceList GetCurrentChoices() override
+		ChoiceList GetCurrentChoices() override
 		{
 			auto list = m_self->GetProperty<Mono::ObjectPtr>("currentChoices");
 			Mono::List<Mono::ObjectPtr> itemList(*list);
@@ -78,87 +104,119 @@ namespace Ink
 			}
 			return choiceList;
 		}
-		virtual std::string GetCurrentText() override
+		std::string GetCurrentText() override
 		{
 			return m_self->GetProperty<std::string>("currentText");
 		}
-		virtual TagList GetCurrentTags() override
+		TagList GetCurrentTags() override
 		{
-			THROW_NO_IMPL; // write a List<string> extraction method
-			return TagList();
+			auto list = m_self->GetProperty<Mono::ObjectPtr>("currentTags");
+			auto strList = ConvertToStringList(list);
+
+			TagList tagList;
+			tagList.assign(strList.begin(), strList.end());
+			return tagList;
 		}
-		virtual StringList GetCurrentErrors() override
+		StringList GetCurrentErrors() override
 		{
-			THROW_NO_IMPL; // write a List<string> extraction method
-			return StringList();
+			auto list = m_self->GetProperty<Mono::ObjectPtr>("currentErrors");
+			return ConvertToStringList(list);
 		}
-		virtual bool HasError() override
+		bool HasError() override
 		{
 			return m_self->GetProperty<bool>("hasError");
 		}
-		virtual VariablesStatePtr GetVariablesState() override
+		VariablesStatePtr GetVariablesState() override
 		{
 			THROW_NO_IMPL;
 			return VariablesStatePtr();
 		}
-		virtual StoryStatePtr GetStoryState() override
+		StoryStatePtr GetStoryState() override
 		{
-			THROW_NO_IMPL;
-			return StoryStatePtr();
+			auto objStoryState = m_self->GetProperty<Mono::ObjectPtr>("state");
+			if (!objStoryState)
+			{
+				return StoryStatePtr();
+			}
+
+			Factory factory;
+			auto storyStatePtr = factory.Create<IStoryState>(m_runtime, [objStoryState](int index, void* arg) -> bool
+			{
+				if (index == 0)
+				{
+					auto ppMonoObj = reinterpret_cast<Mono::ObjectPtr*>(arg);
+					*ppMonoObj = objStoryState;
+					return true;
+				}
+				return false;
+			});
+			return storyStatePtr;
 		}
-		virtual bool LoadStory(const std::string & jsonString) override
+		bool LoadStory(const std::string & jsonString) override
 		{
 			THROW_NO_IMPL;
 			return false;
 		}
-		virtual std::string ToJsonString() override
+		std::string ToJsonString() override
 		{
 			return m_self->CallMethod<std::string>("ToJsonString");
 		}
-		virtual void ResetState() override
+		void ResetState() override
 		{
 			m_self->CallMethod<void>("ResetState");
 		}
-		virtual void ResetErrors() override
+		void ResetErrors() override
 		{
 			m_self->CallMethod<void>("ResetErrors");
 		}
-		virtual void ResetGlobals() override
+		void ResetGlobals() override
 		{
 			m_self->CallMethod<void>("ResetGlobals");
 		}
-		virtual bool CanContinue() override
+		bool CanContinue() override
 		{
 			return m_self->GetProperty<bool>("canContinue");
 		}
-		virtual std::string ContinueMaximally() override
+		std::string ContinueMaximally() override
 		{
 			return m_self->CallMethod<std::string>("ContinueMaximally");
 		}
-		virtual void ChoosePathString(const std::string & path, ArgumentList & arguments) override
+		void ChoosePathString(const std::string & path, ArgumentList& arguments) override
 		{
+			Mono::Array<Mono::ObjectPtr> objArray(static_cast<uint32_t>(arguments.size()));
+			for(int i = 0; i < arguments.size(); ++i)
+			{
+				Mono::ObjectPtr obj = *reinterpret_cast<Mono::ObjectPtr*>(arguments[i]);
+				objArray.Add(i, obj);
+			}
+			MonoArray* monoArray = objArray;
+
+			Mono::Args args;
+			args.Add(path);
+			args.Add(monoArray);
+
+			m_self->CallMethod<void>("ChoosePathString", args);
 			//public void ChoosePathString (string path, params object [] arguments)
-			THROW_NO_IMPL;
 		}
-		virtual void ChooseChoiceIndex(int choiceIdx) override
+		void ChooseChoiceIndex(int choiceIdx) override
 		{
 			Mono::Args args;
 			args.Add(&choiceIdx);
 			return m_self->CallMethod<void>("ChooseChoiceIndex", args);
 		}
-		virtual bool HasFunction(const std::string& functionName) const override
+		bool HasFunction(const std::string& functionName) const override
 		{
 			Mono::Args args;
 			args.Add(functionName);
 			return m_self->CallMethod<bool>("HasFunction", args);
 		}
-		virtual ObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
+		ObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
 		{
 			//public object EvaluateFunction (string functionName, params object [] arguments)
 			THROW_NO_IMPL;
 			return ObjectPtr();
 		}
-		virtual std::string Continue() override
+		std::string Continue() override
 		{
 			return m_self->CallMethod<std::string>("Continue");
 		}

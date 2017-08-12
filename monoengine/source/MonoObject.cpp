@@ -76,18 +76,6 @@ namespace Mono
 	}
 
 	template <>
-	bool Object::CallMethod(const char * methodname, Args args)
-	{
-		auto ret = CallMethodInternal(methodname, args);
-		if(ret)
-		{ 
-			return *(bool*)mono_object_unbox(*ret);
-		}
-		// TODO: log?
-		return false;
-	}
-
-	template <>
 	ObjectPtr Object::CallMethod(const char * methodname, Args args)
 	{
 		ObjectPtr ret = CallMethodInternal(methodname, args);
@@ -143,7 +131,8 @@ namespace Mono
 		return ObjectPtr();
 	}
 
-	// getters
+	///////////////////////////////////////////////////////
+	#pragma region property getters
 
 	static MonoObject* GetPropertyInternal(const char* propertyname, Mono::Class* clazz, MonoObject* obj)
 	{
@@ -233,8 +222,10 @@ namespace Mono
 		}
 		return std::string();
 	}
+#pragma endregion
 
-	// setters
+	///////////////////////////////////////////////////////
+	#pragma region property setters
 
 	template<>
 	void Object::SetProperty(const char * propertyname, int value)
@@ -263,4 +254,28 @@ namespace Mono
 	{
 		throw new std::exception();
 	}
+#pragma endregion
+
+	///////////////////////////////////////////////////////
+	#pragma region field getters
+
+	// TODO string version of this, maybe others?
+
+	//template<>
+	//int Object::GetField(const char * fieldname)
+	//{
+	//	return 0;
+	//}
+
+#pragma endregion
+
+	///////////////////////////////////////////////////////
+	#pragma region field setters 
+
+	//template<>
+	//bool Object::SetField(const char * fieldname, int value)
+	//{
+	//	return false;
+	//}
+#pragma endregion
 }

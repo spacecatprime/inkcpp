@@ -15,3 +15,8 @@ TEST_CASE("ink.setup", "[ink]")
 	Ink::Runtime runtime;
 	REQUIRE(runtime.Setup(config));
 }
+
+TEST_CASE("zzz.the.end", "[ink]")
+{
+	REQUIRE(true == 1);
+}

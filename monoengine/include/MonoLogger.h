@@ -10,6 +10,7 @@ namespace Mono
 	{
 	public:
 		virtual void SetLevel(int level) = 0;
+		virtual std::string ToString(const char* format, ...) = 0;
 
 		virtual void Trace(std::string msg) = 0;
 		virtual void Debug(std::string msg) = 0;
