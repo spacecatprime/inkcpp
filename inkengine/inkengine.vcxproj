@@ -140,12 +140,13 @@
     <ClCompile Include="Story.cpp" />
     <ClCompile Include="StoryException.cpp" />
     <ClCompile Include="StoryState.cpp" />
+    <ClCompile Include="VariablesState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\inkcpp\abstract\IChoice.h" />
     <ClInclude Include="include\inkcpp\abstract\IInkList.h" />
     <ClInclude Include="include\inkcpp\abstract\IInkListItem.h" />
-    <ClInclude Include="include\inkcpp\abstract\IObject.h" />
+    <ClInclude Include="include\inkcpp\abstract\IContentObject.h" />
     <ClInclude Include="include\inkcpp\abstract\IStory.h" />
     <ClInclude Include="include\inkcpp\abstract\IStoryException.h" />
     <ClInclude Include="include\inkcpp\abstract\IStoryState.h" />

@@ -93,7 +93,7 @@ namespace Ink
 
 		/// Returns true if the passed object is also an ink list that contains
 		/// the same items as the current list, false otherwise.
-		virtual bool Equals(ObjectPtr other) = 0;
+		virtual bool Equals(ContentObjectPtr other) = 0;
 
 		/// Return the hash code for this object, used for comparisons and inserting into dictionaries.;
 		virtual int GetHashCode() = 0;

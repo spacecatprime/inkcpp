@@ -33,7 +33,7 @@ namespace Ink
 		virtual const std::string& ToString() = 0;
 
 		/// Is this item the same as another item?
-		virtual bool Equals(IObject* obj) = 0;
+		virtual bool Equals(ContentObjectPtr obj) = 0;
 
 		/// Get the hash code for an item.
 		virtual int GetHashCode() = 0;

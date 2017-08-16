@@ -8,14 +8,14 @@
 namespace Ink
 {
 	// Base class for all ink runtime content.
-	class IObject
+	class IContentObject
 	{
 	public:
 		/// Runtime.Objects can be included in the main Story as a hierarchy. Usually parents are Container objects.
-		virtual IObject* GetParent() const = 0;
-		virtual void SetParent(IObject* parent) = 0;
+		virtual IContentObject* GetParent() const = 0;
+		virtual void SetParent(IContentObject* parent) = 0;
 
-		virtual bool Equals(IObject* obj) const = 0;
+		virtual bool Equals(IContentObject* obj) const = 0;
 	};
 };
 

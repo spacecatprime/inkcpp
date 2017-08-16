@@ -91,6 +91,6 @@ namespace Ink
         virtual bool HasFunction(const std::string& functionName) const = 0;
 
         /// Evaluates a function defined in ink.
-        virtual ObjectPtr EvaluateFunction(const std::string&  functionName, ArgumentList& arguments) = 0;
+        virtual ContentObjectPtr EvaluateFunction(const std::string&  functionName, ArgumentList& arguments) = 0;
     };
 };

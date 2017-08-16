@@ -5,6 +5,7 @@
 #include "include/inkcpp/InkFactory.h"
 #include "include/inkcpp/abstract/IStory.h"
 #include "include/inkcpp/InkRuntime.h"
+#include "include/inkcpp/abstract/IVariablesState.h"
 
 #include <MonoAssembly.h>
 #include <MonoClass.h>
@@ -54,11 +55,13 @@ namespace Ink
 		Mono::ObjectPtr m_self;
 		Mono::ClassPtr m_class;
 		Ink::Runtime& m_runtime;
+		VariablesStatePtr m_variableState;
 
 		Story(Mono::ObjectPtr self, Mono::ClassPtr clazz, Ink::Runtime& rt)
 			: m_self(self)
 			, m_class(clazz)
 			, m_runtime(rt)
+			, m_variableState()
 		{
 		}
 
@@ -128,8 +131,29 @@ namespace Ink
 		}
 		VariablesStatePtr GetVariablesState() override
 		{
-			THROW_NO_IMPL;
-			return VariablesStatePtr();
+			if (m_variableState)
+			{
+				return m_variableState;
+			}
+
+			auto objStoryState = m_self->GetProperty<Mono::ObjectPtr>("variablesState");
+			if (!objStoryState)
+			{
+				return VariablesStatePtr();
+			}
+
+			Factory factory;
+			m_variableState = factory.Create<IVariablesState>(m_runtime, [objStoryState](int index, void* arg) -> bool
+			{
+				if (index == 0)
+				{
+					auto ppMonoObj = reinterpret_cast<Mono::ObjectPtr*>(arg);
+					*ppMonoObj = objStoryState;
+					return true;
+				}
+				return false;
+			});
+			return m_variableState;
 		}
 		StoryStatePtr GetStoryState() override
 		{
@@ -196,7 +220,6 @@ namespace Ink
 			args.Add(monoArray);
 
 			m_self->CallMethod<void>("ChoosePathString", args);
-			//public void ChoosePathString (string path, params object [] arguments)
 		}
 		void ChooseChoiceIndex(int choiceIdx) override
 		{
@@ -210,11 +233,11 @@ namespace Ink
 			args.Add(functionName);
 			return m_self->CallMethod<bool>("HasFunction", args);
 		}
-		ObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
+		ContentObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
 		{
 			//public object EvaluateFunction (string functionName, params object [] arguments)
 			THROW_NO_IMPL;
-			return ObjectPtr();
+			return ContentObjectPtr();
 		}
 		std::string Continue() override
 		{

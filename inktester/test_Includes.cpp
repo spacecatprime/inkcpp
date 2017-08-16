@@ -12,13 +12,14 @@
 #include <inkcpp/abstract/IStory.h>
 #include <inkcpp/abstract/IStoryState.h>
 #include <inkcpp/abstract/IChoice.h>
+#include <inkcpp/abstract/IContentObject.h>
 
 //
 // only a compile test, no running intended 
 //
 TEST_CASE("include.compile.test", "[ink][!hide]")
 {
-	Ink::ObjectPtr objptr;
+	Ink::ContentObjectPtr objptr;
 	Ink::InkListPtr inklist;
 	Ink::InkListItemPtr itemptr;
 	Ink::StoryPtr s;

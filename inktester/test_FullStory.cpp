@@ -18,6 +18,8 @@
 
 #include <MonoLogger.h>
 #include <MonoList.h>
+#include <MonoObject.h>
+#include <MonoUtility.h>
 
 #include <cstdlib>
 #include <ctime>
@@ -159,6 +161,78 @@ TEST_CASE("full.visit.counts.when.choosing", "[ink]")
 
 	REQUIRE(1 == story->GetStoryState()->VisitCountAtPathString("TestKnot"));
 	REQUIRE(1 == story->GetStoryState()->VisitCountAtPathString("TestKnot2"));
+}
+
+/*
+[Test()]
+public void TestVariableGetSetAPI()
+{
+var story = CompileString(@"
+VAR x = 5
+
+{x}
+
+* [choice]
+-
+{x}
+
+* [choice]
+-
+
+{x}
+
+* [choice]
+-
+
+{x}
+
+-> DONE
+");
+
+// Initial state
+Assert.AreEqual("5\n", story.ContinueMaximally());
+Assert.AreEqual(5, story.variablesState["x"]);
+
+story.variablesState["x"] = 10;
+story.ChooseChoiceIndex(0);
+Assert.AreEqual("10\n", story.ContinueMaximally());
+Assert.AreEqual(10, story.variablesState["x"]);
+
+story.variablesState["x"] = 8.5f;
+story.ChooseChoiceIndex(0);
+Assert.AreEqual("8"+ System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator+"5\n", story.ContinueMaximally());
+Assert.AreEqual(8.5f, story.variablesState["x"]);
+
+story.variablesState["x"] = "a string";
+story.ChooseChoiceIndex(0);
+Assert.AreEqual("a string\n", story.ContinueMaximally());
+Assert.AreEqual("a string", story.variablesState["x"]);
+
+Assert.AreEqual(null, story.variablesState["z"]);
+
+// Not allowed arbitrary types
+Assert.Throws<StoryException>(() =>
+{
+story.variablesState["x"] = new System.Text.StringBuilder();
+});
+}
+*/
+TEST_CASE("full.variable.get.set", "[ink]")
+{
+	TestFixture fixture;
+	fixture.Prepare();
+
+	const char* k_JSON = R"({"inkVersion":17,"root":[[["G>","ev",{"VAR?":"x"},"out","/ev","G<",null],"\n",["ev","str","^choice","/str","/ev",{"*":".^.c","flg":20},{"c":["\n","\n",{"->":"0.g-0"},{"#f":5}]}],{"g-0":[["G>","ev",{"VAR?":"x"},"out","/ev","G<",null],"\n",["ev","str","^choice","/str","/ev",{"*":".^.c","flg":20},{"c":["\n","\n",{"->":"0.g-1"},{"#f":5}]}],null],"g-1":[["G>","ev",{"VAR?":"x"},"out","/ev","G<",null],"\n",["ev","str","^choice","/str","/ev",{"*":".^.c","flg":20},{"c":["\n","\n",{"->":"0.g-2"},{"#f":5}]}],null],"g-2":[["G>","ev",{"VAR?":"x"},"out","/ev","G<",null],"\n","done",null]}],"done",{"global decl":["ev",5,{"VAR=":"x"},"/ev","end",null],"#f":3}],"listDefs":{}})";
+	auto story = fixture.CreateStory(k_JSON);
+
+	// Initial state
+	REQUIRE(story->ContinueMaximally() == "5\n");
+	REQUIRE(story->GetVariablesState()->GetVariable("x")->AsUint32() == 5);
+
+	story->GetVariablesState()->SetVariable("x", Mono::BoxValue<int>(10));
+	story->ChooseChoiceIndex(0);
+	REQUIRE(story->ContinueMaximally() == "10\n");
+	REQUIRE(story->GetVariablesState()->GetVariable("x")->AsUint32() == 10);
 }
 
 /*

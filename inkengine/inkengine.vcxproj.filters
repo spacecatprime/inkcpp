@@ -42,9 +42,6 @@
     <ClInclude Include="include\inkcpp\abstract\IInkListItem.h">
       <Filter>include\abstract</Filter>
     </ClInclude>
-    <ClInclude Include="include\inkcpp\abstract\IObject.h">
-      <Filter>include\abstract</Filter>
-    </ClInclude>
     <ClInclude Include="include\inkcpp\abstract\IStory.h">
       <Filter>include\abstract</Filter>
     </ClInclude>
@@ -72,6 +69,9 @@
     <ClInclude Include="include\inkcpp\Story.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\inkcpp\abstract\IContentObject.h">
+      <Filter>include\abstract</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InkRuntime.cpp">
@@ -87,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StoryState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VariablesState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

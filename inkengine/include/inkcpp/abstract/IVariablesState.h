@@ -5,6 +5,8 @@
 
 #include "../Types.h"
 
+#include <MonoObject.h>
+
 namespace Ink
 {
 	/// <summary>
@@ -19,8 +21,8 @@ namespace Ink
 		// The types available are the standard ink types. 
 		// Certain types will be implicitly casted when setting.
 		// For example, doubles to floats, longs to ints, and bools to ints.
-		virtual void SetVariable(const std::string& variableName, ObjectPtr obj) = 0;
-		virtual ObjectPtr GetVariable(const std::string& variableName) = 0;
+		virtual void SetVariable(const std::string& variableName, Mono::ObjectPtr obj) = 0;
+		virtual Mono::ObjectPtr GetVariable(const std::string& variableName) = 0;
 
 		/// Enumerates iteration over all global variables by name.
 		virtual std::vector<std::string> GetGlobalVariables() = 0;

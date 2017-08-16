@@ -9,7 +9,7 @@
 
 namespace Ink
 {
-    class IObject;
+    class IContentObject; // Ink.Runtime.Object
     class IVariablesState;
     class IChoice;
     class IStory;
@@ -18,7 +18,7 @@ namespace Ink
 	class IInkList;
 	class IStoryException;
 
-	using ObjectPtr = std::shared_ptr<IObject>;
+	using ContentObjectPtr = std::shared_ptr<IContentObject>;
 	using VariablesStatePtr = std::shared_ptr<IVariablesState>;
 	using ChoicePtr = std::shared_ptr<IChoice>;
 	using StoryStatePtr = std::shared_ptr<IStoryState>;
