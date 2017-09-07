@@ -63,12 +63,6 @@
     <ClInclude Include="include\inkcpp\InkRuntime.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\inkcpp\StoryException.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\inkcpp\Story.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\inkcpp\abstract\IContentObject.h">
       <Filter>include\abstract</Filter>
     </ClInclude>

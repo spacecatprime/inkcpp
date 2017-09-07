@@ -49,8 +49,7 @@ struct TestFixture
 
 	Ink::StoryPtr CreateStory(const char* json)
 	{
-		Ink::Factory f;
-		Ink::StoryPtr story = f.Create<Ink::IStory>(m_runtime, [json](int index, void* data)
+		Ink::StoryPtr story = Ink::Factory::Create<Ink::IStory>(m_runtime, [json](int index, void* data)
 		{
 			if (index == 0)
 			{
@@ -79,8 +78,7 @@ TEST_CASE("full.withachoice", "[ink]")
            ,{"->":"$r","var":true},null],"c":["ev",{"^->":"0.g-0.3.c.$r2"},"/ev",{"temp=":"$r"},{"->":".^.^.s"},[{"#n":"$r2"}],"\n","\n",{"->":"0.g-1"},{"#f":5}]}],{"#n":"g-0"}]
            ,{"g-1":["^the end.","\n",["end",{"#n":"g-2"}],null]}],"done",{"#f":3}],"listDefs":{}})";
 
-	Ink::Factory f;
-	auto story = f.Create<Ink::IStory>(fixture.m_runtime, [k_JSON](int index, void* data)
+	auto story = Ink::Factory::Create<Ink::IStory>(fixture.m_runtime, [k_JSON](int index, void* data)
 	{
 		if (index == 0)
 		{
@@ -188,34 +186,6 @@ VAR x = 5
 
 -> DONE
 ");
-
-// Initial state
-Assert.AreEqual("5\n", story.ContinueMaximally());
-Assert.AreEqual(5, story.variablesState["x"]);
-
-story.variablesState["x"] = 10;
-story.ChooseChoiceIndex(0);
-Assert.AreEqual("10\n", story.ContinueMaximally());
-Assert.AreEqual(10, story.variablesState["x"]);
-
-story.variablesState["x"] = 8.5f;
-story.ChooseChoiceIndex(0);
-Assert.AreEqual("8"+ System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator+"5\n", story.ContinueMaximally());
-Assert.AreEqual(8.5f, story.variablesState["x"]);
-
-story.variablesState["x"] = "a string";
-story.ChooseChoiceIndex(0);
-Assert.AreEqual("a string\n", story.ContinueMaximally());
-Assert.AreEqual("a string", story.variablesState["x"]);
-
-Assert.AreEqual(null, story.variablesState["z"]);
-
-// Not allowed arbitrary types
-Assert.Throws<StoryException>(() =>
-{
-story.variablesState["x"] = new System.Text.StringBuilder();
-});
-}
 */
 TEST_CASE("full.variable.get.set", "[ink]")
 {

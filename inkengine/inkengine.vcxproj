@@ -153,8 +153,6 @@
     <ClInclude Include="include\inkcpp\abstract\IVariablesState.h" />
     <ClInclude Include="include\inkcpp\InkFactory.h" />
     <ClInclude Include="include\inkcpp\InkRuntime.h" />
-    <ClInclude Include="include\inkcpp\Story.h" />
-    <ClInclude Include="include\inkcpp\StoryException.h" />
     <ClInclude Include="include\inkcpp\Types.h" />
     <ClInclude Include="inkengine.h" />
     <ClInclude Include="stdafx.h" />

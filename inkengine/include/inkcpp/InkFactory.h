@@ -12,9 +12,8 @@ namespace Ink
     /**
       * Creates a run time instance based on a Ink::* Type
       */      
-	class Factory
+	namespace Factory
 	{
-	public:
 		// gets the parameter for construction
 		// @int is the index of the parameter
 		// @void* the value to be filled in

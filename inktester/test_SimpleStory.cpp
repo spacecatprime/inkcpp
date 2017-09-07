@@ -41,12 +41,11 @@ TEST_CASE("simple.construction", "[ink]")
 	config.m_monoSetup.m_monoLibFolder = R"(..\3rd_party\Mono\lib)";
 	REQUIRE(runtime.Setup(config));
 
-	Ink::Factory f;
-	auto excp = f.Create<Ink::IStoryException>(runtime, {});
+	auto excp = Ink::Factory::Create<Ink::IStoryException>(runtime, {});
 
 	const char* k_JSON = R"({"inkVersion":17,"root":["^This is a convenience ink file where you can test out changes in the compiler code.","\n","done",{"#f":3}],"listDefs":{}})";
 
-	auto story = f.Create<Ink::IStory>(runtime, [k_JSON](int index, void* data)
+	auto story = Ink::Factory::Create<Ink::IStory>(runtime, [k_JSON](int index, void* data)
 	{ 
 		if (index == 0)
 		{
@@ -84,8 +83,7 @@ TEST_CASE("simple.withachoice", "[ink]")
 	config.m_monoSetup.m_monoLibFolder = R"(..\3rd_party\Mono\lib)";
 	REQUIRE(runtime.Setup(config));
 
-	Ink::Factory f;
-	auto excp = f.Create<Ink::IStoryException>(runtime, {});
+	auto excp = Ink::Factory::Create<Ink::IStoryException>(runtime, {});
 
 	const char* k_JSON = 
 		R"({"inkVersion":17,"root":[[["^a title description","\n",["ev",{"^->":"0.g-0.2.$r1"},{"temp=":"$r"},"str",{"->":".^.s"},[{"#n":"$r1"}],"/str","/ev",{"*":".^.c"
@@ -94,7 +92,7 @@ TEST_CASE("simple.withachoice", "[ink]")
            ,{"->":"$r","var":true},null],"c":["ev",{"^->":"0.g-0.3.c.$r2"},"/ev",{"temp=":"$r"},{"->":".^.^.s"},[{"#n":"$r2"}],"\n","\n",{"->":"0.g-1"},{"#f":5}]}],{"#n":"g-0"}]
            ,{"g-1":["^the end.","\n",["end",{"#n":"g-2"}],null]}],"done",{"#f":3}],"listDefs":{}})";
 
-	auto story = f.Create<Ink::IStory>(runtime, [k_JSON](int index, void* data)
+	auto story = Ink::Factory::Create<Ink::IStory>(runtime, [k_JSON](int index, void* data)
 	{
 		if (index == 0)
 		{
@@ -122,8 +120,8 @@ TEST_CASE("simple.withachoice", "[ink]")
 
 	int ver = story->GetInkVersionCurrent();
 	REQUIRE(ver == 17);
-	//TODO story->GetStoryState();
-	//TODO story->GetVariablesState();
+	story->GetStoryState();
+	story->GetVariablesState();
 	Ink::TagList tags = story->GetCurrentTags();
 	Ink::StringList errs = story->GetCurrentErrors();
 	std::string data = story->ToJsonString();

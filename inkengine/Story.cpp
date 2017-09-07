@@ -82,7 +82,6 @@ namespace Ink
 				return ChoiceList();
 			}
 
-			Factory factory;
 			ChoiceList choiceList;
 
 			for (int i = 0; i < itemCount; ++i)
@@ -99,7 +98,7 @@ namespace Ink
 					return false;
 				};
 
-				auto ch = factory.Create<IChoice>(m_runtime, fnParameters);
+				auto ch = Factory::Create<IChoice>(m_runtime, fnParameters);
 				if (ch)
 				{
 					choiceList.emplace_back(ch);
@@ -142,8 +141,7 @@ namespace Ink
 				return VariablesStatePtr();
 			}
 
-			Factory factory;
-			m_variableState = factory.Create<IVariablesState>(m_runtime, [objStoryState](int index, void* arg) -> bool
+			m_variableState = Factory::Create<IVariablesState>(m_runtime, [objStoryState](int index, void* arg) -> bool
 			{
 				if (index == 0)
 				{
@@ -163,8 +161,7 @@ namespace Ink
 				return StoryStatePtr();
 			}
 
-			Factory factory;
-			auto storyStatePtr = factory.Create<IStoryState>(m_runtime, [objStoryState](int index, void* arg) -> bool
+			auto storyStatePtr = Factory::Create<IStoryState>(m_runtime, [objStoryState](int index, void* arg) -> bool
 			{
 				if (index == 0)
 				{
@@ -235,7 +232,7 @@ namespace Ink
 		}
 		ContentObjectPtr EvaluateFunction(const std::string & functionName, ArgumentList & arguments) override
 		{
-			//public object EvaluateFunction (string functionName, params object [] arguments)
+			//public object EvaluateFunction (string functionName, params object [] arguments) TODO
 			THROW_NO_IMPL;
 			return ContentObjectPtr();
 		}

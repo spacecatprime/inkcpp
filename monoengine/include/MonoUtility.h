@@ -9,23 +9,6 @@
 
 namespace Mono
 {
-	template <typename ToType, typename FromType>
-	using ConvertTo = std::function<ToType(FromType)>;
-
-	template <typename T>
-	struct Convert
-	{
-		//static auto To(ConvertTo func, T &&t) -> T
-		//{
-		//	return std::forward<T>(t);
-		//}
-
-		static auto From(T &&t) -> T
-		{
-			return std::forward<T>(t);
-		}
-	};
-
 	static std::string ToString(MonoObject* obj)
 	{
 		if (!obj)
@@ -75,18 +58,4 @@ namespace Mono
 		MonoObject* obj = mono_value_box(mono_get_root_domain(), mono_get_double_class(), &value);
 		return ObjectPtr(new Object(obj));
 	}
-
-	//template <>
-	//struct Convert<std::string>
-	//{
-	//	using mono_type_name = MonoString *;
-	//	static auto to_mono(mono_assembly &assembly, const std::string &str) -> MonoString *
-	//	{
-	//		return assembly.new_string(str).get_mono_string();
-	//	}
-	//	static auto from_mono(MonoString *mono_str) -> std::string
-	//	{
-	//		return mono_string(mono_str).str();
-	//	}
-	//};
 }

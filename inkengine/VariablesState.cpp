@@ -44,7 +44,7 @@ namespace Ink
 		}
 		std::vector<std::string> GetGlobalVariables() override
 		{
-			// public IEnumerator<string> GetEnumerator()
+			// public IEnumerator<string> GetEnumerator() TODO
 			return std::vector<std::string>();
 		}
 	};
