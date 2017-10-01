@@ -172,6 +172,7 @@ call fixup.bat
   <ItemGroup>
     <ClCompile Include="monotester.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="test_compile.cpp" />
     <ClCompile Include="test_experiement.cpp" />
   </ItemGroup>
   <ItemGroup>

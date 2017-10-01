@@ -58,4 +58,27 @@ namespace Mono
 		MonoObject* obj = mono_value_box(mono_get_root_domain(), mono_get_double_class(), &value);
 		return ObjectPtr(new Object(obj));
 	}
+
+	/*
+		Entry place to store and retrieve a singleton pointer; 
+		the application must hold the pointer through out the life cycle of the object
+	*/
+	template<class TClass>
+	class Singleton
+	{
+	protected:
+		inline static void Set(TClass* obj)
+		{
+			s_instance = obj;
+		}
+
+	public:
+		inline static TClass* Get()
+		{
+			return s_instance;
+		}
+
+	private:
+		static TClass* s_instance;
+	};
 }

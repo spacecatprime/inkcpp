@@ -3,6 +3,7 @@
 namespace Mono
 {
 	String::String(const char * string)
+		: TypeContainer(nullptr)
 	{
 		if (string)
 		{
@@ -15,6 +16,7 @@ namespace Mono
 	}
 
 	String::String(std::string string)
+		: TypeContainer(nullptr)
 	{
 		if (string.empty())
 		{
@@ -24,6 +26,11 @@ namespace Mono
 		{
 			m_typeInstance = mono_string_new_wrapper(string.c_str());
 		}
+	}
+
+	String::String(MonoString* monostring)
+		: TypeContainer(monostring)
+	{
 	}
 
 	String::~String()

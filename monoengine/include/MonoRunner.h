@@ -1,10 +1,12 @@
 #pragma once
 
 #include "MonoTypes.h"
+#include "MonoUtility.h"
 
 namespace Mono
 {
-	class Runner
+	class Runner 
+		: public Singleton<Runner>
 	{
 	public:
 		struct SetupDesc
@@ -14,22 +16,37 @@ namespace Mono
 			std::string m_assembliesPath;
 			std::string m_domainName;
 		};
-		using AssemblyMap = std::unordered_map<std::string, AssemblyPtr>;
 
 		Runner();
 		~Runner();
 
 		bool Setup(SetupDesc& desc);
 
-		AssemblyPtr LoadAssembly(const char* assemblyPath);
+		inline ImagePtr GetMscorlib()
+		{
+			return m_mscorlib;
+		}
 
-		ImagePtr GetMscorlib();
+		inline DomainPtr GetDomain() 
+		{ 
+			return m_domain;
+		}
+
+		inline AssemblyPtr GetSystemAssembly() const
+		{
+			return m_systemAssembly;
+		}
+
+		inline const std::string& GetBaseAssemblyPath() const
+		{
+			return m_baseAssemblyPath;
+		}
 
 	protected:
 
+		AssemblyPtr m_systemAssembly;
 		ImagePtr m_mscorlib;
 		DomainPtr m_domain;
-		AssemblyMap m_assemblyMap;
 		std::string m_baseAssemblyPath;
 	};
 }

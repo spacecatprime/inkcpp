@@ -21,6 +21,8 @@ namespace Mono
 {
 	MonoObject* Object_RuntimeInvoke(MonoMethod* method, void *obj, void **params)
 	{
+		Mono::GetLogger()->Trace(mono_method_full_name(method, true));
+
 		MonoObject* exp = nullptr;
 		MonoObject* ret = mono_runtime_invoke(method, obj, params, &exp);
 		if (exp)
@@ -31,19 +33,19 @@ namespace Mono
 		return ret;
 	}
 
-	Object::Object(ClassPtr clazz)
-		: m_class(clazz)
+	Object::Object(MonoObject* obj, ClassPtr clazz)
+		: TypeContainer<MonoObject>(obj)
+		, m_class(clazz)
 	{
 	}
 
 	Object::Object(MonoObject* obj)
+		: TypeContainer<MonoObject>(obj)
 	{
 		if (obj)
 		{
-			m_class = ClassPtr(new Class());
-			m_class->SetInstance(mono_object_get_class(obj));
+			m_class = ClassPtr(new Class(mono_object_get_class(obj)));
 			m_class->Reflect();
-			SetInstance(obj);
 		}
 	}
 
@@ -102,33 +104,65 @@ namespace Mono
 		return *(double*)mono_object_unbox(m_typeInstance);
 	}
 
+
 	ObjectPtr Object::CallMethodInternal(const char* methodname, Args args)
 	{
-		const auto& map = m_class->GetMethodMap();
-		auto m = std::find_if(std::begin(map), std::end(map), [methodname](auto kvp) 
+		if (!m_class)
 		{
-			return kvp.first.find(methodname) != kvp.first.npos;
-		});
-		if (m != map.end())
+			return ObjectPtr();
+		}
+
+		auto method = Class::FindMethod(m_class->GetMethodMap(), methodname);
+		if (!method)
+		{
+			method = LoadVirtualMethod(methodname, args);
+		}
+
+		if (method)
 		{
 			void** params = nullptr;
 			if (!args.IsEmpty())
 			{
 				params = args;
 			}
-			MonoObject* ret = Object_RuntimeInvoke(*m->second, m_typeInstance, params);
+			MonoObject* ret = Object_RuntimeInvoke(*method, m_typeInstance, params);
 			if (ret)
 			{
-				auto clsptr = ClassPtr(new Class());
-				clsptr->SetInstance(mono_object_get_class(ret));
+				auto clsptr = ClassPtr(new Class(mono_object_get_class(ret)));
 				clsptr->Reflect();
 
-				ObjectPtr out = ObjectPtr(new Object(clsptr));
-				out->SetInstance(ret);
-				return out;
+				return ObjectPtr(new Object(ret, clsptr));
 			}
 		}
 		return ObjectPtr();
+	}
+
+	bool Object::RegisterVirtualMethod(const std::string& aNamespace, const std::string& aBaseInterfaceClass, const std::string& virtualMethod, int methodParameterCount)
+	{
+		auto ifaceMethod = GetClass()->RegisterVirtualMethod(aNamespace, aBaseInterfaceClass, virtualMethod, methodParameterCount);
+		if (!ifaceMethod)
+		{
+			return false;
+		}
+		auto ifaceImplMethod = mono_object_get_virtual_method(m_typeInstance, *ifaceMethod);
+
+		if (!ifaceImplMethod)
+		{
+			return false;
+		}
+		auto methodPtr = MethodPtr(new Method(ifaceImplMethod));
+		m_virtualMethods.insert(std::make_pair(virtualMethod, methodPtr));
+		return true;
+	}
+
+	MethodPtr Object::LoadVirtualMethod(const std::string& methodname, Args args)
+	{
+		auto itMethod = m_virtualMethods.find(methodname);
+		if (itMethod != m_virtualMethods.end())
+		{
+			return itMethod->second;
+		}
+		return MethodPtr();
 	}
 
 	///////////////////////////////////////////////////////
@@ -170,12 +204,10 @@ namespace Mono
 		MonoObject* ret = GetPropertyInternal(propertyname, m_class.get(), m_typeInstance);
 		if (ret)
 		{
-			auto clsptr = ClassPtr(new Class());
-			clsptr->SetInstance(mono_object_get_class(ret));
+			auto clsptr = ClassPtr(new Class(mono_object_get_class(ret)));
 			clsptr->Reflect();
 
-			ObjectPtr out = ObjectPtr(new Object(clsptr));
-			out->SetInstance(ret);
+			ObjectPtr out = ObjectPtr(new Object(ret, clsptr));
 			return out;
 		}
 		return ObjectPtr();
@@ -224,8 +256,8 @@ namespace Mono
 	}
 #pragma endregion
 
-	///////////////////////////////////////////////////////
-	#pragma region property setters
+///////////////////////////////////////////////////////
+#pragma region property setters
 
 	template<>
 	void Object::SetProperty(const char * propertyname, int value)
@@ -236,11 +268,11 @@ namespace Mono
 	template<>
 	void Object::SetProperty(const char * propertyname, std::string value)
 	{
-		const std::string propgetter("set_" + std::string(propertyname));
+		const std::string propname("set_" + std::string(propertyname));
 		const auto& map = m_class->GetMethodMap();
 		for (auto m : map)
 		{
-			if (m.first.find(propgetter) != m.first.npos)
+			if (m.first.find(propname) != m.first.npos)
 			{
 				Mono::Args args;
 				args.Add(value);
@@ -249,11 +281,23 @@ namespace Mono
 		}
 	}
 
+	//void Object::SetProperty(const char * propertyname, float value)
+	//{
+	//	throw new std::exception();
+	//}
+
 	template<>
-	void Object::SetProperty(const char * propertyname, float value)
+	void Object::SetProperty(const char * propertyname, bool value)
 	{
-		throw new std::exception();
+		auto setter = m_class->FindMethod(GetClass()->GetMethodMap(), std::string("set_") + propertyname);
+		if (setter)
+		{
+			Mono::Args args;
+			args.Add(&value);
+			Object_RuntimeInvoke(*setter, m_typeInstance, args);
+		}
 	}
+
 #pragma endregion
 
 	///////////////////////////////////////////////////////

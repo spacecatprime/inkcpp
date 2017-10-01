@@ -18,5 +18,5 @@ TEST_CASE("ink.setup", "[ink]")
 
 TEST_CASE("zzz.the.end", "[ink]")
 {
-	REQUIRE(true == 1);
+	REQUIRE(true);
 }

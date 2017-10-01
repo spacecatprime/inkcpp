@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include <initializer_list>
+#include <algorithm>
 
 namespace Mono
 {
@@ -18,6 +19,7 @@ namespace Mono
 	class Object;
 	class String;
 	class Method;
+	class Runner;
 
 	// -------------------------------------------------------
 	using ImagePtr = std::shared_ptr<Image>;
@@ -27,18 +29,22 @@ namespace Mono
 	using ObjectPtr = std::shared_ptr<Object>;
 	using StringPtr = std::shared_ptr<String>;
 	using MethodPtr = std::shared_ptr<Method>;
+	using RunnerPtr = std::shared_ptr<Runner>;
 
 	// -------------------------------------------------------
 	template <typename T>
 	class TypeContainer
 	{
 	public:
-		TypeContainer()
-			: m_typeInstance(nullptr)
+		TypeContainer(T* inst)
+			: m_typeInstance(inst)
 		{
 		}
 
-		~TypeContainer() = default;
+		~TypeContainer() 
+		{
+			m_typeInstance = nullptr;
+		}
 
 		template <typename T>
 		operator const T*() const
@@ -50,12 +56,6 @@ namespace Mono
 		operator T* ()
 		{
 			return m_typeInstance;
-		}
-
-		template <typename T>
-		void SetInstance(T* inst)
-		{
-			m_typeInstance = inst;
 		}
 
 		template <typename T>

@@ -8,19 +8,23 @@
 
 namespace Mono
 {
+	// Static
 	static int s_numRunners = 0;
 
+	template <>
+	Runner* Singleton<Runner>::s_instance = nullptr;
+
 	Runner::Runner()
-		: m_mscorlib(new Image)
-		, m_domain(new Domain)
-		, m_assemblyMap()
+		: m_mscorlib()
+		, m_domain()
 	{
 		if (s_numRunners == 0)
 		{
 			// Load the default Mono configuration file, this is needed
 			// if you are planning on using the dllmaps defined on the system configuration
-			mono_config_parse(NULL);
+			mono_config_parse(nullptr);
 			s_numRunners++;
+			Set(this);
 		}
 	}
 
@@ -32,9 +36,14 @@ namespace Mono
 		//	mono_jit_cleanup(*m_domain);
 		//	m_domain.reset();
 		//}
+		--s_numRunners;
+		if (s_numRunners == 0)
+		{
+			Set(nullptr);
+		}
 	}
 
-	bool Runner::Setup(SetupDesc & desc)
+	bool Runner::Setup(SetupDesc& desc)
 	{
 		mono_set_dirs(desc.m_monoLibFolder.c_str(), desc.m_monoEtcConfigFolder.c_str());
 		mono_set_assemblies_path(desc.m_assembliesPath.c_str());
@@ -50,36 +59,11 @@ namespace Mono
 			}
 		}
 
-		m_domain->SetInstance(dom);
-		m_mscorlib->SetInstance(mono_image_loaded("mscorlib"));
+		m_domain.reset(new Domain(dom));
+		m_mscorlib.reset(new Image(mono_image_loaded("mscorlib")));
+		m_systemAssembly = m_domain->LoadFullAssembly(desc.m_monoEtcConfigFolder, "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
 		m_baseAssemblyPath = desc.m_assembliesPath;
 		return m_domain->IsValid();
 	}
-
-	AssemblyPtr Runner::LoadAssembly(const char* assemblyPath)
-	{
-		// Open a assembly in the domain
-		MonoAssembly* a = mono_domain_assembly_open(*m_domain, assemblyPath);
-		if (!a)
-		{
-			MonoImageOpenStatus status;
-			MonoAssemblyName* monoAssemblyName = mono_assembly_name_new(assemblyPath);
-			a = mono_assembly_load(monoAssemblyName, m_baseAssemblyPath.c_str(), &status);
-			mono_assembly_name_free(monoAssemblyName);
-			if (!a || status != MONO_IMAGE_OK)
-			{
-				return AssemblyPtr();
-			}
-		}
-
-		AssemblyPtr assembly(new Assembly);
-		assembly->SetInstance(a);
-		assembly->Init(m_domain);
-		return assembly;
-	}
-
-	ImagePtr Runner::GetMscorlib()
-	{
-		return m_mscorlib;
-	}
 }
+

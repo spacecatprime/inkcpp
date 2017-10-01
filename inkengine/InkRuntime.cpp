@@ -4,6 +4,8 @@
 #include <MonoAssembly.h>
 #include <MonoClass.h>
 #include <MonoLogger.h>
+#include <MonoRunner.h>
+#include <MonoDomain.h>
 
 namespace Ink
 {
@@ -29,9 +31,9 @@ namespace Ink
 		}
 
 #ifdef _DEBUG
-		m_inkAssembly = m_runner->LoadAssembly("ink-engine-runtime-debug.dll");
+		m_inkAssembly = m_runner->GetDomain()->LoadAssembly("ink-engine-runtime-debug.dll", m_setup.m_assembliesPath);
 #else
-		m_inkAssembly = m_runner->LoadAssembly("ink-engine-runtime-release.dll");
+		m_inkAssembly = m_runner->GetDomain()->LoadAssembly("ink-engine-runtime-release.dll", m_setup.m_assembliesPath);
 #endif
 		if (!m_inkAssembly->IsValid())
 		{

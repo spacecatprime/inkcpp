@@ -9,8 +9,9 @@ namespace Mono
 		: public TypeContainer<MonoAssembly>
 	{
 	public:
-		Assembly();
-		~Assembly() = default;
+		using ClassMap = std::unordered_map<std::string, ClassPtr>;
+
+		Assembly(MonoAssembly* asmb);
 
 		ClassPtr LookupClass(const char* namepath, const char* classname);
 
@@ -19,11 +20,12 @@ namespace Mono
 
 		bool Init(DomainPtr domain);
 
-	protected:
-		using ClassMap = std::unordered_map<std::string, ClassPtr>;
+		ImagePtr GetImage() const { return m_image; }
+		const ClassMap GetClassMap() const { return m_classMap; }
 
+	protected:
+		ClassMap m_classMap;
 		ImagePtr m_image;
 		DomainPtr m_domain;
-		ClassMap m_classMap;
 	};
 }

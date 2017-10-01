@@ -11,8 +11,7 @@ namespace Mono
 		: public TypeContainer<MonoObject>
 	{
 	public:
-		explicit Object() : m_class() {}
-		explicit Object(ClassPtr clazz);
+		explicit Object(MonoObject* obj, ClassPtr clazz);
 		explicit Object(MonoObject* obj);
 
 		MethodPtr GetMethod(const char* methodname);
@@ -41,11 +40,15 @@ namespace Mono
 
 		ClassPtr GetClass() { return m_class; }
 
+		bool RegisterVirtualMethod(const std::string& aNamespace, const std::string& aBaseInterfaceClass, const std::string& virtualMethod, int methodParameterCount);
+
 	protected:
 		ObjectPtr CallMethodInternal(const char* methodname, Args args = Args());
+		MethodPtr LoadVirtualMethod(const std::string& methodname, Args args);
 
 	protected:
 		ClassPtr m_class;
+		Class::MethodMap m_virtualMethods;
 	};
 
 	template <>	
@@ -117,5 +120,4 @@ namespace Mono
 		mono_field_set_value(m_typeInstance, f, arg);
 		return true;
 	}
-
 }

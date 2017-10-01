@@ -5,6 +5,7 @@
 #include "../include/MonoArgs.h"
 #include "../include/MonoDomain.h"
 #include "../include/MonoLogger.h"
+#include "../include/MonoMethod.h"
 
 #include <mono/metadata/object.h>
 #include <mono/metadata/assembly.h>
@@ -12,17 +13,41 @@
 
 namespace Mono
 {
-	Assembly::Assembly()
-		: m_image(new Image)
-		, m_domain()
+	Assembly::Assembly(MonoAssembly* asmb)
+		: TypeContainer(asmb)
 		, m_classMap()
+		, m_image()
+		, m_domain()
 	{
 	}
 
 	ClassPtr Assembly::LookupClass(const char* namepath, const char* classname)
 	{
-		// class cache
-		std::string hash = std::string(namepath) + "." + std::string(classname);
+		if (!namepath || !classname)
+		{
+			Mono::GetLogger()->Error("both namepath and classname required; empty namepath okay");
+			return ClassPtr();
+		}
+
+		// determine namespace+class hash
+		std::string np(namepath);
+		std::string cn(classname);
+		std::string hash;
+		if (!np.empty() && !cn.empty())
+		{
+			hash = np + "." + cn;
+		}		
+		else if (!cn.empty())
+		{
+			hash = cn;
+		}
+		else
+		{
+			Mono::GetLogger()->Error("classname has to be non-empty");
+			return ClassPtr();
+		}
+
+		// check on class cache
 		auto it = m_classMap.find(hash);
 		if (it != m_classMap.end())
 		{
@@ -34,8 +59,7 @@ namespace Mono
 		{
 			return ClassPtr();
 		}
-		auto outClass = ClassPtr(new Class);
-		outClass->SetInstance(klass);
+		auto outClass = ClassPtr(new Class(klass));
 		outClass->Reflect();
 		m_classMap.emplace(hash, outClass);
 		return outClass;
@@ -58,9 +82,9 @@ namespace Mono
 
 		mono_runtime_object_init(inst);
 
-		ObjectPtr obj = ObjectPtr(new Object(classPtr));
-		obj->SetInstance(inst);
-		return obj;
+		auto out = ObjectPtr(new Object(inst, classPtr));
+		out->GetClass()->Reflect();
+		return out;
 	}
 
 	ObjectPtr Assembly::CreateObject(const char* namepath, const char* classname, const char* ctorname, Args args)
@@ -91,13 +115,13 @@ namespace Mono
 		else
 		{
 			// Get the constructor of the class.
-			MonoMethodDesc* ctorDesc = mono_method_desc_new(ctorname, true);
-			if (!ctorDesc)
+			auto ctorDesc = Method::CreateDesc(ctorname, true);
+			if (!ctorDesc->IsValid())
 			{
 				return ObjectPtr();
 			}
 
-			MonoMethod* pConstructorMethod = mono_method_desc_search_in_class(ctorDesc, *classPtr);
+			MonoMethod* pConstructorMethod = mono_method_desc_search_in_class(*ctorDesc, *classPtr);
 			if (!pConstructorMethod)
 			{
 				return ObjectPtr();
@@ -113,13 +137,18 @@ namespace Mono
 			}
 		}
 
-		ObjectPtr obj = ObjectPtr(new Object(classPtr));
-		obj->SetInstance(inst);
+		ObjectPtr obj = ObjectPtr(new Object(inst, classPtr));
+		obj->GetClass()->Reflect();
 		return obj;
 	}
 
 	bool Assembly::Init(DomainPtr domain)
 	{
+		if (m_typeInstance == nullptr)
+		{
+			return false;
+		}
+
 		m_domain = domain;
 
 		// Get a image from the assembly
@@ -128,7 +157,7 @@ namespace Mono
 		{
 			return false;
 		}
-		m_image->SetInstance(img);
+		m_image.reset(new Image(img));
 		return true;
 	}
 }

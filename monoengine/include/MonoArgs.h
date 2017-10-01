@@ -23,7 +23,7 @@ namespace Mono
 		}
 
 		template<typename T>
-		void Add(T arg)
+		inline void Add(T arg)
 		{
 			m_args.push_back(arg);
 		}
@@ -54,6 +54,17 @@ namespace Mono
 			}
 		}
 
+		inline size_t Count() const
+		{
+			return m_args.size();
+		}
+
+		void Clear()
+		{
+			m_args.clear();
+			m_strings.clear();
+		}
+
 	private:
 		std::vector<void*> m_args;
 		std::vector<StringPtr> m_strings;
@@ -76,4 +87,5 @@ namespace Mono
 		m_args.push_back(reinterpret_cast<void*>(raw));
 		m_strings.push_back(str);
 	}
+
 }

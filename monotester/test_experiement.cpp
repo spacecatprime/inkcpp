@@ -9,6 +9,7 @@
 #include <MonoAssembly.h>
 #include <MonoObject.h>
 #include <MonoList.h>
+#include <MonoDomain.h>
 
 #include <string>
 
@@ -28,9 +29,9 @@ TEST_CASE("experiment.runner", "[mono]")
     imgcor->CallStaticMethod("System.Console:WriteLine(string)", Mono::Args({ "Hello World" }));
 
 #ifdef _DEBUG
-	auto a = runner.LoadAssembly(R"(../resources/ink-engine-runtime-debug.dll)");
+	auto a = runner.GetDomain()->LoadAssembly(R"(../resources/ink-engine-runtime-debug.dll)", runnerSetup.m_assembliesPath);
 #else
-	auto a = runner.LoadAssembly(R"(../resources/ink-engine-runtime-release.dll)");
+	auto a = runner.GetDomain()->LoadAssembly(R"(../resources/ink-engine-runtime-release.dll)", runnerSetup.m_assembliesPath);
 #endif
     REQUIRE(a);
 	a->LookupClass("Ink.Runtime", "Tag");

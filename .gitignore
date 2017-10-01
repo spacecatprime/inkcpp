@@ -47,6 +47,8 @@
 *.app
 
 # removing extra folders
+resources/$archive/
+monocompile/
 3rd_party/Mono/
 monotester/x64/
 inktester/x64/

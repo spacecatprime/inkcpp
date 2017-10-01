@@ -9,8 +9,7 @@ namespace Mono
 		: public TypeContainer<MonoImage>
 	{
 	public:
-		Image();
-		~Image() = default;
+		using TypeContainer::TypeContainer;
 
 		ObjectPtr CallStaticMethod(const char* signature, Args& args);
 	};

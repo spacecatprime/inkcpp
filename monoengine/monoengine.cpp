@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "monoengine.h"
 
 #include <mono/jit/jit.h>
 
@@ -19,18 +18,3 @@
 
 #pragma comment(lib, "mono-2.0-sgen.lib")
 
-// This is an example of an exported variable
-MONOENGINE_API int nmonoengine=0;
-
-// This is an example of an exported function.
-MONOENGINE_API int fnmonoengine(void)
-{
-    return 42;
-}
-
-// This is the constructor of a class that has been exported.
-// see monoengine.h for the class definition
-Cmonoengine::Cmonoengine()
-{
-    return;
-}

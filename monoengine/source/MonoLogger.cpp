@@ -6,6 +6,14 @@
 #include <cstdio>
 #include <cstdarg>
 
+#ifdef _WINDOWS
+	#define WIN32_LEAN_AND_MEAN
+	#include <Windows.h>
+	#define DEBUG_PRINT ::OutputDebugStringA
+#else
+	#define DEBUG_PRINT // 
+#endif
+
 namespace Mono
 {
 	struct DefaultLogger 
@@ -16,6 +24,10 @@ namespace Mono
 		void Printf(const char* category, const char* msg)
 		{
 			std::printf("%s: %s\n", category, msg);
+			DEBUG_PRINT(category);
+			DEBUG_PRINT(": ");
+			DEBUG_PRINT(msg);
+			DEBUG_PRINT("\n");
 		}
 
 		// Inherited via ILogger
@@ -75,11 +87,11 @@ namespace Mono
 		}
 		void Exception(MonoObject* except) override
 		{
-			std::printf("except: %s\n", Mono::ToString(except).c_str());
+			Printf("except", Mono::ToString(except).c_str());
 		}
 	};
 
-	static ILogger* theLogger = nullptr;
+	static ILogger* s_theLogger = nullptr;
 
 	ILogger* CreateDefaultLogger()
 	{
@@ -88,12 +100,17 @@ namespace Mono
 
 	void SetLogger(ILogger* logger)
 	{
-		theLogger = logger;
+		s_theLogger = logger;
 	}
 
 	ILogger* GetLogger()
 	{
-		return theLogger;
+		if (!s_theLogger)
+		{
+			SetLogger(CreateDefaultLogger());
+			s_theLogger->Trace("Auto-installed default logger.");
+		}
+		return s_theLogger;
 	}
 }
 
